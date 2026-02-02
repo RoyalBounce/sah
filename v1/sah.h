@@ -1,18 +1,19 @@
 #ifndef SAH_H
 #define SAH_H
 
+
 /*
  * SAH is implemented both to Linux and Windows
  * to reach your desired version jump or filter
  * between "__unix__" or "_WIN32"
  *
  * current status:
- * Linux	Ready (functional but incomplete)
- * Windows	W.I.P
+ * Linux	Ready
+ * Windows	Ready
  * */
 
-#ifdef __unix__
 
+#ifdef __unix__
 
 #include <stddef.h>
 #include <stdint.h>
@@ -22,40 +23,33 @@
 
 #define STACK_SIZE 4096
 
-
 /* =========================
    Private types
    ========================= */
-
 
 struct _stack_header {
 	size_t size;
 };
 
-
 /* =========================
    Public Types
    ========================= */
 
-
 struct sah_stack {
-	uint8_t* bp;
-	uint8_t* sp;
+	uint8_t* bp; __attribute__((aligned(64)));
+	uint8_t* sp; __attribute__((aligned(64)));
 };
-
 
 /* =========================
    Public API
    ========================= */
 
-
-struct sah_stack* stack_create(void);
-void stack_destroy(struct sah_stack*);
+struct sah_stack* screate(void);
+void sdestroy(struct sah_stack*);
 static inline void* push(struct sah_stack*, size_t);
 static inline void pop(struct sah_stack*, size_t);
-static inline void* spush(struct sah_stack*, size_t);
-static inline void spop(struct sah_stack*);
-
+void* spush(struct sah_stack*, size_t);
+void spop(struct sah_stack*);
 
 /* =========================
    Implementation
@@ -74,7 +68,7 @@ static inline void pop(struct sah_stack* s, size_t n)
 
 #ifdef SAH_IMPLEMENTATION
 
-struct sah_stack* stack_create(void)
+struct sah_stack* screate(void)
 {
 	size_t guard = sysconf(_SC_PAGESIZE);
 	size_t total = guard + STACK_SIZE;
@@ -96,7 +90,7 @@ struct sah_stack* stack_create(void)
 	return s;
 }
 
-void stack_destroy(struct sah_stack* s)
+void sdestroy(struct sah_stack* s)
 {
 	if (s == NULL) return;
 
@@ -136,9 +130,120 @@ void spop(struct sah_stack* s)
 
 #ifdef _WIN32
 
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <windows.h>
 
-// W.I.P
+#define STACK_SIZE 4096
 
+/* =========================
+   Private Types
+   ========================= */
 
+struct _stack_header {
+	size_t n;
+};
+
+/* =========================
+   Public Types
+   ========================= */
+
+struct sah_stack {
+	uint8_t* bp; __attribute__((aligned(64)));
+	uint8_t* sp; __attribute__((aligned(64)));
+};
+
+/* =========================
+   Public API
+   ========================= */
+
+struct sah_stack* screate(void);
+void sdestroy(struct sah_stack*);
+static inline void* push(struct sah_stack*, size_t);
+static inline void pop(struct sah_stack*, size_t);
+void* spush(struct sah_stack*, size_t);
+void spop(struct sah_stack*);
+
+/* =========================
+   Implementation
+   ========================= */
+
+static inline void* push(struct sah_stack* s, size_t n)
+{
+	s->sp -= n;
+	return s->sp;
+}
+
+static inline void pop(struct sah_stack* s, size_t n)
+{
+	s->sp += n;
+}
+
+#ifdef SAH_IMPLEMENTATION
+
+struct sah_stack* screate(void)
+{
+	SYSTEM_INFO si;
+	GetSystemInfo(&si);
+	DWORD dw = si.dw.PageSize;
+
+	size_t guard = (size_t)dw;
+	size_t total = guard + STACK_SIZE;
+	uint8_t* mem = VirtualAlloc(NULL, total, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+	if (!mem)
+		return NULL;
+	
+	DWORD unused;
+	VirtualProtect(mem, guard, PAGE_NOACCESS, &unused);
+
+	struct sah_stack* s = malloc(sizeof(struct sah_stack));
+	if (!s) {
+		VirtualFree(mem, 0, MEM_RELEASE);
+		return NULL;
+	}
+
+	s->bp = mem + total;
+	s->sp = s->bp;
+	return s;
+}
+
+void sdestroy(struct sah_stack* s)
+{
+	if (!s) return;
+
+	SYSTEM_INFO si;
+	GetSystemInfo(&si);
+	DWORD dw = si.dw.PageSize;
+	size_t guard = (size_t)dw;
+	size_t total = guard + STACK_SIZE;
+
+	uint8_t* mem = s->bp - total;
+	VirtualFree(mem, 0, MEM_RELEASE);
+	free(s);
+}
+
+void* spush(struct sah_stack* s, size_t n)
+{
+	size_t total = sizeof(struct _stack_header) + n;
+
+	s->sp -= total;
+
+	struct _stack_header* hdr = (struct _stack_header*)s->sp;
+	hdr->size = n;
+
+	return (void*)(hdr + 1);
+}
+
+void spop(struct sah_stack* s)
+{
+	struct _stack_header* hdr = (struct _stack_header*)s->sp;
+	size_t total = sizeof(struct _stack_header) + hdr->size;
+
+	s->sp += total;
+}
+
+#endif /* WINDOWS_IMPLEMENTATION */
 #endif /* _WIN32 */
+
 #endif /* SAH_H */

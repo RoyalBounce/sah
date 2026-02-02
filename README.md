@@ -118,7 +118,7 @@ This makes bugs fail fast and keeps the allocator branch-free.
 
 # Platform Support
 - Linux: Supported
-- Windows: Work In Progress
+- Windows: Supported
 
 # License
 BSD 3-Clause

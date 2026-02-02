@@ -125,3 +125,6 @@ Windows: Work In Progress
 
 # License
 BSD 3-Clause
+
+# Observation
+SAH is a personal project of mine and for my own enjoyment, is a very experimental library and should be treated as such, it should not be used in production without caution if desired to be used

@@ -45,8 +45,8 @@ On Linux, SAH maps two regions, a 4 or 8 KB guard page and a 4 KB stack by defau
 ### Create / Destroy
 
 ```c
-struct sah_stack* stack_create(void);
-void stack_destroy(struct sah_stack* s);
+struct sah_stack* screate(void);
+void sdestroy(struct sah_stack* s);
 ```
 Creates a new stack backed by mmap and installs a guard page.
 
@@ -91,7 +91,7 @@ This behaves like a simple stack allocator with headers.
 
 int main(void)
 {
-    struct sah_stack* s = stack_create();
+    struct sah_stack* s = screate();
 
     int* x = push(s, sizeof(int));
     *x = 123;
@@ -102,7 +102,7 @@ int main(void)
     spop(s);              // frees buf
     pop(s, sizeof(int)); // frees x
 
-    stack_destroy(s);
+    sdestroy(s);
     return 0;
 }
 ```

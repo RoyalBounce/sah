@@ -142,7 +142,7 @@ void spop(struct sah_stack* s)
    ========================= */
 
 struct _stack_header {
-	size_t n;
+	size_t size;
 };
 
 /* =========================

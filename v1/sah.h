@@ -186,7 +186,7 @@ struct sah_stack* screate(void)
 {
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
-	DWORD dw = si.dw.PageSize;
+	DWORD dw = si.dwPageSize;
 
 	size_t guard = (size_t)dw;
 	size_t total = guard + STACK_SIZE;
@@ -214,7 +214,7 @@ void sdestroy(struct sah_stack* s)
 
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
-	DWORD dw = si.dw.PageSize;
+	DWORD dw = si.dwPageSize;
 	size_t guard = (size_t)dw;
 	size_t total = guard + STACK_SIZE;
 

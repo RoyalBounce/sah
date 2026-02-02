@@ -59,9 +59,8 @@ void  pop(struct sah_stack* s, size_t n);
 ```
 Semantics:
 
-push(n) moves SP down by n bytes and returns a pointer to write to.
-
-pop(n) moves SP up by n bytes.
+- push(n) moves SP down by n bytes and returns a pointer to write to.
+- pop(n) moves SP up by n bytes.
 
 This is equivalent to:
 ```asm
@@ -80,9 +79,8 @@ void  spop(struct sah_stack* s);
 ```
 Semantics:
 
-spush(n) allocates n bytes and stores internal metadata.
-
-spop() automatically pops the last spush() block.
+- spush(n) allocates n bytes and stores internal metadata.
+- spop() automatically pops the last spush() block.
 
 This behaves like a simple stack allocator with headers.
 

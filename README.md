@@ -117,9 +117,8 @@ This is by design and mimics real stack overflow behavior.
 This makes bugs fail fast and keeps the allocator branch-free.
 
 # Platform Support
-Linux: Supported
-
-Windows: Work In Progress
+- Linux: Supported
+- Windows: Work In Progress
 
 # License
 BSD 3-Clause

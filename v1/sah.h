@@ -61,6 +61,17 @@ static inline void spop(struct sah_stack*);
    Implementation
    ========================= */
 
+static inline void* push(struct sah_stack* s, size_t n)
+{
+	s->sp -= n;
+	return s->sp;
+}
+
+static inline void pop(struct sah_stack* s, size_t n)
+{
+	s->sp += n;
+}
+
 #ifdef SAH_IMPLEMENTATION
 
 struct sah_stack* stack_create(void)
@@ -98,18 +109,7 @@ void stack_destroy(struct sah_stack* s)
 	free(s);
 }
 
-static inline void* push(struct sah_stack* s, size_t n)
-{
-	s->sp -= n;
-	return s->sp;
-}
-
-static inline void pop(struct sah_stack* s, size_t n)
-{
-	s->sp += n;
-}
-
-static inline void* spush(struct sah_stack* s, size_t n)
+void* spush(struct sah_stack* s, size_t n)
 {
 	size_t total = sizeof(struct _stack_header) + n;
 
@@ -121,7 +121,7 @@ static inline void* spush(struct sah_stack* s, size_t n)
 	return (void*)(hdr + 1);
 }
 
-static inline void spop(struct sah_stack* s)
+void spop(struct sah_stack* s)
 {
 	struct _stack_header* hdr = (struct _stack_header*)s->sp;
 	size_t total = sizeof(struct _stack_header) + hdr->size;
@@ -131,14 +131,14 @@ static inline void spop(struct sah_stack* s)
 
 
 #endif /* LINUX_IMPLEMENTATION */
-#endif /* LINUX_PORT */
+#endif /* __unix__ */
 
 
-#ifdef __WIN32
+#ifdef _WIN32
 
 
 // W.I.P
 
 
-#endif /* WINDOWS_PORT */
+#endif /* _WIN32 */
 #endif /* SAH_H */

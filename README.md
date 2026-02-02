@@ -1,4 +1,3 @@
-
 # SAH — Stack as Heap
 
 SAH (Stack as Heap) is a small, low-level C library that provides a

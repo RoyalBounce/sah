@@ -27,27 +27,22 @@
    Private types
    ========================= */
 
-
 struct _stack_header {
 	size_t size;
 };
 
-
 /* =========================
    Public Types
    ========================= */
-
 
 struct sah_stack {
 	uint8_t* bp;
 	uint8_t* sp;
 };
 
-
 /* =========================
    Public API
    ========================= */
-
 
 struct sah_stack* stack_create(void);
 void stack_destroy(struct sah_stack*);
@@ -55,7 +50,6 @@ static inline void* push(struct sah_stack*, size_t);
 static inline void pop(struct sah_stack*, size_t);
 static inline void* spush(struct sah_stack*, size_t);
 static inline void spop(struct sah_stack*);
-
 
 /* =========================
    Implementation
@@ -129,16 +123,12 @@ static inline void spop(struct sah_stack* s)
 	s->sp += total;
 }
 
-
 #endif /* LINUX_IMPLEMENTATION */
 #endif /* LINUX_PORT */
 
-
 #ifdef __WIN32
 
-
 // W.I.P
-
 
 #endif /* WINDOWS_PORT */
 #endif /* SAH_H */

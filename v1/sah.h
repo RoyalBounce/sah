@@ -36,9 +36,9 @@ struct _stack_header {
    ========================= */
 
 struct sah_stack {
-	uint8_t* bp; __attribute__((aligned(64)));
-	uint8_t* sp; __attribute__((aligned(64)));
-};
+	uint8_t* bp;
+	uint8_t* sp;
+}; __attribute__((aligned(64)));
 
 /* =========================
    Public API
@@ -150,9 +150,9 @@ struct _stack_header {
    ========================= */
 
 struct sah_stack {
-	uint8_t* bp; __attribute__((aligned(64)));
-	uint8_t* sp; __attribute__((aligned(64)));
-};
+	uint8_t* bp;
+	uint8_t* sp;
+}; __attribute__((aligned(64)));
 
 /* =========================
    Public API

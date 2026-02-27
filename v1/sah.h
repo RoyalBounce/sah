@@ -66,6 +66,11 @@ static inline void pop(struct sah_stack* s, size_t n)
 	s->sp += n;
 }
 
+static inline void sreset(struct sah_stack* s)
+{
+	s->sp = s->bp;
+}
+
 #ifdef SAH_IMPLEMENTATION
 
 #define ALIGN(n) (((n) + 15) & ~15)
@@ -179,6 +184,11 @@ static inline void* push(struct sah_stack* s, size_t n)
 static inline void pop(struct sah_stack* s, size_t n)
 {
 	s->sp += n;
+}
+
+static inline void sreset(struct sah_stack* s)
+{
+	s->sp = s->bp;
 }
 
 #ifdef SAH_IMPLEMENTATION

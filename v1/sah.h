@@ -68,6 +68,8 @@ static inline void pop(struct sah_stack* s, size_t n)
 
 #ifdef SAH_IMPLEMENTATION
 
+#define ALIGN(n) (((n) + 15) & ~15)
+
 struct sah_stack* screate(void)
 {
 	size_t guard = sysconf(_SC_PAGESIZE);
@@ -105,8 +107,9 @@ void sdestroy(struct sah_stack* s)
 
 void* spush(struct sah_stack* s, size_t n)
 {
-	size_t total = sizeof(struct _stack_header) + n;
-
+	size_t rtotal = sizeof(struct _stack_header) + n;
+	size_t total = ALIGN(rtotal);
+	
 	s->sp -= total;
 
 	struct _stack_header* hdr = (struct _stack_header*)s->sp;
@@ -118,9 +121,7 @@ void* spush(struct sah_stack* s, size_t n)
 void spop(struct sah_stack* s)
 {
 	struct _stack_header* hdr = (struct _stack_header*)s->sp;
-	size_t total = sizeof(struct _stack_header) + hdr->size;
-
-	s->sp += total;
+	s->sp += hdr->size;
 }
 
 
@@ -182,6 +183,8 @@ static inline void pop(struct sah_stack* s, size_t n)
 
 #ifdef SAH_IMPLEMENTATION
 
+#define ALIGN(n) (((n) + 15) & ~15)
+
 struct sah_stack* screate(void)
 {
 	SYSTEM_INFO si;
@@ -225,7 +228,8 @@ void sdestroy(struct sah_stack* s)
 
 void* spush(struct sah_stack* s, size_t n)
 {
-	size_t total = sizeof(struct _stack_header) + n;
+	size_t rtotal = sizeof(struct _stack_header) + n;
+	size_t total = ALIGN(rtotal);
 
 	s->sp -= total;
 
@@ -238,9 +242,7 @@ void* spush(struct sah_stack* s, size_t n)
 void spop(struct sah_stack* s)
 {
 	struct _stack_header* hdr = (struct _stack_header*)s->sp;
-	size_t total = sizeof(struct _stack_header) + hdr->size;
-
-	s->sp += total;
+	s->sp += hdr->size;
 }
 
 #endif /* WINDOWS_IMPLEMENTATION */

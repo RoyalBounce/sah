@@ -1,90 +1,53 @@
 # SAH — Stack as Heap
 
-SAH (Stack as Heap) is a small, low-level C library that provides a
-**stack-backed allocator** implemented on top of `mmap` (Linux) and
-virtual memory primitives.
+---
 
-The goal of SAH is to offer a **fast, predictable, stack-like temporary
-allocation model**, with guard pages and real stack semantics, while
-being controlled explicitly by the user.
+**Current Version:** 1.0.0
+
+---
+
+## Introduction
+
+SAH is a small, low-level C library that provides a stack-backed allocator built on top of virtual memory primitives. It is designed for temporary allocations, arenas, parsers, runtimes, virtual machines, and any performance-critical code that benefits from predictable, fast memory management.
 
 This is not a general-purpose heap replacement.
-It is designed for **temporary allocations, arenas, parsing, runtimes,
-VMs, and performance-critical code**.
 
-## Key Ideas
+---
 
-- Memory is allocated using `mmap` (or `VirtualAlloc` on Windows).
-- A guard page is placed below the stack to catch overflows.
-- The stack grows **downwards**, like a real CPU stack.
-- A base pointer (BP) and stack pointer (SP) are explicitly managed.
-- Allocation and deallocation are O(1) and branch-free.
-- Overflow is detected by the OS via a page fault (SIGSEGV).
+## Functionality
 
-SAH is essentially a **stack allocator / LIFO arena** with real virtual
-memory protection.
+SAH maps a fixed-size memory region and places a guard page below the stack to catch overflows at the OS level. Allocation and deallocation are O(1) and branch-free. The stack grows downward, following real CPU stack semantics, managed through an explicit base pointer and stack pointer.
 
-## Memory Layout
+Overflow is not caught by the library. If the stack pointer crosses into the guard page, the OS raises a segmentation fault. This is by design — bugs fail fast, and the allocator stays branch-free.
 
-On Linux, SAH maps two regions, a 4 or 8 KB guard page and a 4 KB stack by default
+Two allocation interfaces are provided: a raw interface where the caller manages sizes manually, and a structured interface that stores metadata so sizes do not need to be tracked by the caller.
 
-- The stack grows downward.
-- SP starts at BP.
-- Crossing into the guard page triggers a segmentation fault.
+---
 
-## Design Goals
+## Layout
 
-- Minimal overhead (no bounds checks in hot paths)
-- Real stack semantics (BP/SP, downward growth)
-- OS-level overflow detection
-- Simple and predictable behavior
-- Suitable for temporary allocations and arenas
+SAH maps two contiguous regions. The first is a guard page, placed at the bottom of the allocation, which has no access permissions. The second is the usable stack region, 4096 bytes by default. The stack pointer starts at the top of the usable region and moves downward with each allocation.
 
-## Public API
-
-### Create / Destroy
-
-```c
-struct sah_stack* screate(void);
-void sdestroy(struct sah_stack* s);
 ```
-Creates a new stack backed by mmap and installs a guard page.
-
-## Raw Push / Pop (manual size)
-
-These are the lowest-level operations.
-```c
-void* push(struct sah_stack* s, size_t n);
-void  pop(struct sah_stack* s, size_t n);
-```
-Semantics:
-
-- push(n) moves SP down by n bytes and returns a pointer to write to.
-- pop(n) moves SP up by n bytes.
-
-This is equivalent to:
-```asm
-sub rsp, n   ; push
-add rsp, n   ; pop
+High address  [ Stack region  - 4096 bytes ]  <-- BP, SP starts here
+              [ Guard page   - 1 page      ]  <-- PROT_NONE / PAGE_NOACCESS
+Low address
 ```
 
-The caller is responsible for matching push/pop sizes.
+---
 
-## Structured Push / Pop (automatic size tracking)
+## Goals
 
-SAH also provides a metadata-based interface that automatically tracks block sizes.
-```c
-void* spush(struct sah_stack* s, size_t n);
-void  spop(struct sah_stack* s);
-```
-Semantics:
+- Minimal overhead with no bounds checks in hot paths
+- Real stack semantics: downward growth, explicit BP and SP
+- OS-level overflow detection via guard page
+- Simple, predictable behavior with a small API surface
+- Suitable for temporary allocations and arena-style usage patterns
 
-- spush(n) allocates n bytes and stores internal metadata.
-- spop() automatically pops the last spush() block.
+---
 
-This behaves like a simple stack allocator with headers.
+## Example
 
-# Example
 ```c
 #define SAH_IMPLEMENTATION
 #include "sah.h"
@@ -93,35 +56,64 @@ int main(void)
 {
     struct sah_stack* s = screate();
 
+    /* raw push/pop — caller tracks size */
     int* x = push(s, sizeof(int));
     *x = 123;
 
-    char* buff = spush(s, 32);
-    // use buff...
-
-    spop(s);              // frees buf
-    pop(s, sizeof(int)); // frees x
+    /* structured push/pop — size stored internally */
+    char* buf = spush(s, 32);
+    /* use buf ... */
+    spop(s);              /* frees buf  */
+    pop(s, sizeof(int)); /* frees x    */
 
     sdestroy(s);
     return 0;
 }
 ```
 
-# Error Handling and Overflow
-SAH intentionally does not perform bounds checks in hot paths.
-If the stack grows into the guard page:
+To use SAH, define `SAH_IMPLEMENTATION` in exactly one translation unit before including the header.
 
-The OS will raise a segmentation fault (SIGSEGV on Linux).
-This is by design and mimics real stack overflow behavior.
+---
 
-This makes bugs fail fast and keeps the allocator branch-free.
+## Documentation
 
-# Platform Support
-- Linux: Supported
-- Windows: Supported
+The full public API is declared in `sah.h`.
 
-# License
+**screate** — allocates a new stack backed by virtual memory and installs a guard page. Returns a pointer to the stack structure, or NULL on failure.
+
+**sdestroy** — unmaps the memory region and frees the stack structure.
+
+**push / pop** — raw operations. `push(s, n)` moves the stack pointer down by n bytes and returns a pointer to the allocated region. `pop(s, n)` moves the stack pointer up by n bytes. The caller is responsible for matching sizes.
+
+**spush / spop** — structured operations. `spush(s, n)` allocates n bytes and stores a metadata header internally. `spop(s)` reads the header to determine the size and restores the stack pointer automatically.
+
+**sreset** — moves the stack pointer back to the base pointer, discarding all allocations at once.
+
+---
+
+## Other Languages
+
+SAH is implemented in C only. No bindings for other languages are currently planned.
+
+---
+
+## Platform Support
+
+| Platform | Status  |
+|----------|---------|
+| Linux    | Ready   |
+| Windows  | Ready   |
+
+On Linux, SAH uses `mmap` and `mprotect`. On Windows, SAH uses `VirtualAlloc` and `VirtualProtect`. The API is identical on both platforms.
+
+---
+
+## License
+
 BSD 3-Clause
 
-# Observation
-SAH is a personal project of mine and for my own enjoyment, is a very experimental library and should be treated as such, it should not be used in production without caution if desired to be used
+---
+
+## Observation
+
+SAH is a personal project, written for learning and enjoyment. It is experimental and should be treated as such. Use in production at your own discretion.

@@ -126,7 +126,7 @@ void* spush(struct sah_stack* s, size_t n)
 void spop(struct sah_stack* s)
 {
 	struct _stack_header* hdr = (struct _stack_header*)s->sp;
-	s->sp += hdr->size;
+	s->sp += ALIGN(sizeof(struct _stack_header) + hdr->size);
 }
 
 
@@ -252,7 +252,7 @@ void* spush(struct sah_stack* s, size_t n)
 void spop(struct sah_stack* s)
 {
 	struct _stack_header* hdr = (struct _stack_header*)s->sp;
-	s->sp += hdr->size;
+	s->sp += ALIGN(sizeof(struct _stack_header) + hdr->size);
 }
 
 #endif /* WINDOWS_IMPLEMENTATION */

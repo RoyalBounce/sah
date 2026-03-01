@@ -8,7 +8,7 @@
 [ドキュメント](Documentation/v1/docs/doc\ja_JP.rst)
 
 ## Other Languages (README)
-[Português](Documentation/v1/readme/README\pt_Br.md) \
+[Português](Documentation/v1/readme/README\pt_BR.md) \
 [日本語](Documentation/v1/readme/README\ja_JP.md)
 
 ## Introduction

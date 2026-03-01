@@ -8,8 +8,8 @@
 [ドキュメント](Documentation/v1/doc\ja_JP.rst)
 
 ## Other Languages (README)
-[Português](Documentation/v1/doc.rst) \
-[日本語](Documentation/v1/doc.rst)
+[Português](README\pt_BR.md) \
+[日本語](README\ja_JP.md)
 
 ## Introduction
 

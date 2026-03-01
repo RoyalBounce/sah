@@ -3,13 +3,13 @@
 **Current Version:** Elm (elm1)
 
 ## Documentation
-[English Documentation](Documentation/v1/doc\en_US.rst) \
-[Documentação em Português](Documentation/v1/doc\pt_BR.rst) \
-[ドキュメント](Documentation/v1/doc\ja_JP.rst)
+[English Documentation](Documentation/v1/docs/doc\en_US.rst) \
+[Documentação em Português](Documentation/v1/docs/doc\pt_BR.rst) \
+[ドキュメント](Documentation/v1/docs/doc\ja_JP.rst)
 
 ## Other Languages (README)
-[Português](README\pt_BR.md) \
-[日本語](README\ja_JP.md)
+[Português](Documentation/v1/readme/README\pt_Br.md) \
+[日本語](Documentation/v1/readme/README\ja_JP.md)
 
 ## Introduction
 

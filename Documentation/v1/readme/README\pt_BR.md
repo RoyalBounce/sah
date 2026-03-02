@@ -1,5 +1,3 @@
-# SAH — Stack as Heap
-**Versão Atual:** Elm (elm1)
 ## Documentação
 [English Documentation](Documentation/v1/docs/doc\en_US.rst) \
 [Documentação em Português](Documentation/v1/docs/doc\pt_BR.rst) \
@@ -8,7 +6,7 @@
 [Português](Documentation/v1/readme/README\pt_BR.md) \
 [日本語](Documentation/v1/readme/README\ja_JP.md)
 ## Introdução
-SAH é uma pequena biblioteca C de baixo nível que fornece um alocador baseado em pilha, construído sobre primitivas de memória virtual. É projetada para alocações temporárias, arenas, parsers, runtimes, máquinas virtuais e qualquer código crítico de desempenho que se beneficie de um gerenciamento de memória previsível e rápido.
+SAH (Stack as Heap) é uma pequena biblioteca C de baixo nível que fornece um alocador baseado em pilha, construído sobre primitivas de memória virtual. É projetada para alocações temporárias, arenas, parsers, runtimes, máquinas virtuais e qualquer código crítico de desempenho que se beneficie de um gerenciamento de memória previsível e rápido.
 
 Este não é um substituto de heap de uso geral.
 ## Funcionamento

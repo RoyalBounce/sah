@@ -1,7 +1,7 @@
 ## ドキュメント
 [English Documentation](Documentation/v1/docs/doc\en_US.md) \
-[Documentação em Português](Documentation/v1/docs/doc\pt_BR.rst) \
-[日本語ドキュメント](Documentation/v1/docs/doc\ja_JP.rst)
+[Documentação em Português](Documentation/v1/docs/doc\pt_BR.md) \
+[日本語ドキュメント](Documentation/v1/docs/doc\ja_JP.md)
 
 ## その他の言語 (README)
 [Português](Documentation/v1/readme/README\pt_BR.md) \

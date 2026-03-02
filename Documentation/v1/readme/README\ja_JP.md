@@ -1,6 +1,3 @@
-# SAH — Stack as Heap
-**現在のバージョン:** Elm (elm1)
-
 ## ドキュメント
 [English Documentation](Documentation/v1/docs/doc\en_US.rst) \
 [Documentação em Português](Documentation/v1/docs/doc\pt_BR.rst) \
@@ -11,7 +8,7 @@
 [English](Documentation/v1/readme/README\en_US.md)
 
 ## はじめに (Introduction)
-SAHは、仮想メモリのプリミティブ上に構築された、スタック型アロケータを提供する軽量な低レイヤーC言語ライブラリです。一時的なメモリ割り当て、アリーナ、パーサー、ランタイム、仮想マシンなど、予測可能で高速なメモリ管理が求められるパフォーマンス重視のコード向けに設計されています。
+SAH (Stack as Heap)は、仮想メモリのプリミティブ上に構築された、スタック型アロケータを提供する軽量な低レイヤーC言語ライブラリです。一時的なメモリ割り当て、アリーナ、パーサー、ランタイム、仮想マシンなど、予測可能で高速なメモリ管理が求められるパフォーマンス重視のコード向けに設計されています。
 
 本ライブラリは、汎用的なヒープアロケータを代替するものではありません。
 

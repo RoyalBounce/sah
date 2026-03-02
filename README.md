@@ -3,9 +3,9 @@
 **Current Version:** Elm (elm1)
 
 ## Documentation
-[English Documentation](Documentation/v1/docs/doc\en_US.rst) \
-[Documentação em Português](Documentation/v1/docs/doc\pt_BR.rst) \
-[ドキュメント](Documentation/v1/docs/doc\ja_JP.rst)
+[English Documentation](Documentation/v1/docs/doc\en_US.md) \
+[Documentação em Português](Documentation/v1/docs/doc\pt_BR.md) \
+[ドキュメント](Documentation/v1/docs/doc\ja_JP.md)
 
 ## Other Languages (README)
 [Português](Documentation/v1/readme/README\pt_BR.md) \

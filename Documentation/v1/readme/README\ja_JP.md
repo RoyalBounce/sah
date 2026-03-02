@@ -1,5 +1,5 @@
 ## ドキュメント
-[English Documentation](Documentation/v1/docs/doc\en_US.rst) \
+[English Documentation](Documentation/v1/docs/doc\en_US.md) \
 [Documentação em Português](Documentation/v1/docs/doc\pt_BR.rst) \
 [日本語ドキュメント](Documentation/v1/docs/doc\ja_JP.rst)
 

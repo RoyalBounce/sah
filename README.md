@@ -1,5 +1,3 @@
-# SAH — Stack as Heap
-
 ## Documentation
 [English Documentation](Documentation/v1/docs/doc\en_US.md) \
 [Documentação em Português](Documentation/v1/docs/doc\pt_BR.md) \
@@ -11,7 +9,7 @@
 
 ## Introduction
 
-SAH is a small, low-level C library that provides a stack-backed allocator built on top of virtual memory primitives. It is designed for temporary allocations, arenas, parsers, runtimes, virtual machines, and any performance-critical code that benefits from predictable, fast memory management.
+SAH (Stack as Heap) is a small, low-level C library that provides a stack-backed allocator built on top of virtual memory primitives. It is designed for temporary allocations, arenas, parsers, runtimes, virtual machines, and any performance-critical code that benefits from predictable, fast memory management.
 
 This is not a general-purpose heap replacement.
 

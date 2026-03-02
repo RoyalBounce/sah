@@ -1,7 +1,5 @@
 # SAH — Stack as Heap
 
-**Current Version:** Elm (elm1)
-
 ## Documentation
 [English Documentation](Documentation/v1/docs/doc\en_US.md) \
 [Documentação em Português](Documentation/v1/docs/doc\pt_BR.md) \

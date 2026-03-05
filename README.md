@@ -4,7 +4,7 @@
 [ドキュメント](Documentation/v1/docs/ja_JP.md)
 
 ## Other Languages (README)
-[Português](Documentation/v1/readme/REAME\pt_BR.md) \
+[Português](Documentation/v1/readme/README\pt_BR.md) \
 [日本語](Documentation/v1/readme/ja_JP.md)
 
 ## Introduction
